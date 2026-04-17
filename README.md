@@ -1,72 +1,100 @@
-# Missouri-Water-Information-system
-## Water Data ETL Pipeline (Missouri Water Information System)
+# Missouri Water Information System – ETL Pipeline
 
 ## Overview
 
-This project demonstrates the design of a real-world data pipeline that integrates multiple environmental data sources including NOAA, USGS, and rainfall servers.
+This project presents a real-time data engineering system developed as part of a published research paper.
 
-The system was developed as part of a published research project and focuses on ETL pipeline design, data integration, and time-series processing.
+The system integrates hydrologic data from multiple external APIs (NOAA, USGS) and processes it through an automated ETL pipeline for analytics and visualization.
 
----
-
-## What This Project Shows
-
-* Multi-source data ingestion (APIs + external datasets)
-* Data cleaning and transformation (timestamps, missing values)
-* Schema normalization across heterogeneous data
-* Scheduled data pipelines (15-minute updates)
-* API-based data serving (Flask)
-* Geospatial visualization support
+📄 Paper: [http://dx.doi.org/10.2139/ssrn.5277101]
 
 ---
 
-## Data Sources
+## System Architecture
 
-* NOAA API (weather and rainfall)
-* USGS API (streamflow and sensor data)
-* Rainfall processing server (map overlays)
+![Architecture](architecture.png)
 
----
+The platform consists of:
 
-## ETL Pipeline Design
-
-**Ingestion**
-
-* Fetch data from APIs and external sources
-* Handle JSON and CSV formats
-
-**Transformation**
-
-* Convert timestamps (GMT → CST)
-* Clean missing and inconsistent values
-* Normalize schema
-
-**Output**
-
-* Store structured data in database
-* Serve via API for frontend visualization
+* Data ingestion from external APIs
+* Backend processing (ETL pipeline)
+* Relational database storage
+* API layer for data serving
 
 ---
 
-## Data Quality Considerations
+## ETL Pipeline
 
-* Missing sensor values
-* Timestamp inconsistencies
-* Duplicate records from multiple sources
-* Data normalization across APIs
+![Pipeline](pipeline.png)
+
+### Ingestion
+
+* USGS API → real-time sensor data (15-minute updates)
+* NOAA API → forecast data (hourly updates)
+* External rainfall servers
+
+### Transformation
+
+* Timestamp normalization (UTC standardization)
+* Schema alignment across APIs
+* Data cleaning and validation
+
+### Storage
+
+* MySQL relational database
+* Normalized schema (3NF)
+* Time-series data with composite keys
+
+### Serving
+
+* Flask API
+* JSON responses for frontend visualization
 
 ---
 
-## Research Paper
+## Data Quality & Reliability
 
-This work is based on my published research:
+* Validation for missing or invalid values
+* Retry logic for API failures
+* Error logging
+* Deduplication using sensor ID + timestamp
+* Redis caching for performance
 
-[Add your DOI link here]
+---
+
+## Pipeline Scheduling
+
+* Cron jobs:
+
+  * Observations → every 15 minutes
+  * Forecasts → hourly
+* Automated cleanup and cache management
+
+---
+
+## Technologies
+
+* Python
+* Flask
+* MySQL
+* Redis
+* Cron Jobs
+
+---
+
+## Key Data Engineering Concepts
+
+* ETL pipeline design
+* Multi-source data integration
+* Data validation and cleaning
+* Time-series processing
+* Pipeline automation
+* Scalable system architecture
 
 ---
 
 ## Note
 
-This repository focuses on system design, pipeline architecture, and data engineering concepts rather than full production code.
+This repository focuses on system architecture and data pipeline design derived from a production-scale research system.
 
-I’d be happy to walk through implementation details, tradeoffs, and scaling considerations in discussion.
+I’d be happy to walk through implementation details and how this could be extended using PySpark and Databricks.
